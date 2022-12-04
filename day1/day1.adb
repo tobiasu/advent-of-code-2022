@@ -8,7 +8,6 @@ procedure Day1 is
 
 
    function String_To_Integer(S: String; Base: Integer := 10) return Integer is
-      use Ada.Text_IO;
       use Ada.Assertions;
       use Ada.Strings;
       Res: Natural := 0;
@@ -17,7 +16,7 @@ procedure Day1 is
       Start: Positive;
       Signedness: Integer;
    begin
-      if S'Length <= 0 then
+      if S'Length = 0 then
          raise Assertion_Error
             with "can't convert string of length zero";
       end if;
