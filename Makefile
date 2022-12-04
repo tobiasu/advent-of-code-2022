@@ -1,4 +1,4 @@
-SUBDIR=day1
+SUBDIR=day1 day2
 
 define make-subdir
 	for d in $(SUBDIR); do \
