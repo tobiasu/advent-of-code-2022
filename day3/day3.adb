@@ -46,7 +46,7 @@ procedure Day3 is
 
       for I of C loop
          declare
-            Idx: Positive := To_Idx(I);
+            Idx: constant Positive := To_Idx(I);
          begin
             if MarkA(Idx) and MarkB(Idx) then
                Sum := Sum + Idx;
@@ -65,7 +65,7 @@ begin
    Open(Input, In_File, "input.txt");
    while not End_Of_File(Input) loop
       declare
-         Line: String := Get_Line(Input);
+         Line: constant String := Get_Line(Input);
       begin
          Find_Collision(
             Line(Line'First..Line'Last/2),
@@ -82,7 +82,7 @@ begin
    Reset(Input);
    while not End_Of_File(Input) loop
       declare
-         Line: String := Get_Line(Input);
+         Line: constant String := Get_Line(Input);
       begin
          case Group_Cnt is
             when 0 =>
