@@ -6,7 +6,8 @@ procedure Day3 is
    use Ada.Text_Io;
    use Ada.Integer_Text_Io;
 
-   type Map_Arr is array(Positive range 1..52) of Integer;
+   type Map_Arr is array(Positive range 1..52) of Boolean;
+   for Map_Arr'Component_Size use 1;
 
    function To_Idx(C: Character) return Positive is
    begin
@@ -17,14 +18,14 @@ procedure Day3 is
    end To_Idx;
 
    procedure Find_Collision(A, B: String; Sum: in out Natural) is
-      Mark: Map_Arr := (others => 0);
+      Mark: Map_Arr := (others => False);
    begin
       for C of A loop
-         Mark(To_Idx(C)) := 1;
+         Mark(To_Idx(C)) := True;
       end loop;
 
       for C of B loop
-         if Mark(To_Idx(C)) > 0 then
+         if Mark(To_Idx(C)) then
                Sum := Sum + To_Idx(C);
             return;
          end if;
@@ -32,28 +33,26 @@ procedure Day3 is
    end Find_Collision;
 
    procedure Find_Collision_Three(A, B, C: String; Sum: in out Natural) is
-      Mark: Map_Arr := (others => 0);
-      Merge: Map_Arr := (others => 0);
+      MarkA: Map_Arr := (others => False);
+      MarkB: Map_Arr := (others => False);
    begin
       for I of A loop
-         Mark(To_Idx(I)) := 1;
+         MarkA(To_Idx(I)) := True;
       end loop;
-      Merge := Mark;
 
-      Mark := (others => 0);
       for I of B loop
-         Mark(To_Idx(I)) := 1;
-      end loop;
-
-      for J in Merge'Range loop
-         Merge(J) := Merge(J) + Mark(J);
+         MarkB(To_Idx(I)) := True;
       end loop;
 
       for I of C loop
-         if Merge(To_Idx(I)) = 2 then
-            Sum := Sum + To_Idx(I);
-            return;
-         end if;
+         declare
+            Idx: Positive := To_Idx(I);
+         begin
+            if MarkA(Idx) and MarkB(Idx) then
+               Sum := Sum + Idx;
+               return;
+            end if;
+         end;
       end loop;
    end Find_Collision_Three;
 
@@ -74,14 +73,13 @@ begin
             Sum);
       end;
    end loop;
-   Close(Input);
 
    Put("Sum:");
    Put(Sum);
    New_Line;
 
    Sum := 0;
-   Open(Input, In_File, "input.txt");
+   Reset(Input);
    while not End_Of_File(Input) loop
       declare
          Line: String := Get_Line(Input);
