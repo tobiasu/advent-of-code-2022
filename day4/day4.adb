@@ -15,9 +15,9 @@ procedure Day4 is
 
    procedure Check_Range_Contains(First, Second: Section_Rec; Sum: in out Natural) is
    begin
-      if First.From <= Second.From and First.To >= Second.To then
-         Sum := Sum + 1;
-      elsif First.From >= Second.From and First.To <= Second.To then
+      if (First.From <= Second.From and First.To >= Second.To) or
+         (First.From >= Second.From and First.To <= Second.To)
+      then
          Sum := Sum + 1;
       end if;
    end Check_Range_Contains;
@@ -26,10 +26,7 @@ procedure Day4 is
    procedure Check_Range_Overlap(First, Second: Section_Rec; Sum: in out Natural) is
       function In_Range(S: Section_Rec; Inside: Natural) return Boolean is
       begin
-         if Inside >= S.From and Inside <= S.To then
-            return True;
-         end if;
-         return False;
+         return Inside in S.From..S.To;
       end In_Range;
    begin
       -- surely there is a more elegant solution...
