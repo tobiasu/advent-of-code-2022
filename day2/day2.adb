@@ -1,8 +1,6 @@
 with Ada.Text_IO;
 with Ada.Integer_Text_IO;
 with Ada.Assertions;
-with Ada.Strings.Fixed;
-with Ada.Containers.Vectors;
 
 procedure Day2 is
 
@@ -38,8 +36,6 @@ procedure Day2 is
 
    procedure One_Round(Opponent, Player: Play_Type; Total: in out Natural) is
       Score: Natural := Play_Type'Pos(Player) + 1;
-      use Ada.Text_IO;
-      use Ada.Integer_Text_IO;
    begin
       case Opponent is
          when Rock =>
@@ -98,7 +94,7 @@ begin
    Open(Input, In_File, "input.txt");
    while not End_Of_File(Input) loop
       declare
-         Line: String := Get_Line(Input);
+         Line: constant String := Get_Line(Input);
       begin
          if Line'Length = 3 then
             One_Round(

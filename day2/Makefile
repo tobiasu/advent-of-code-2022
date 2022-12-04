@@ -1,5 +1,7 @@
+include ../makevars.inc
+
 all:
-	gnatmake day2
+	gnatmake $(GNATFLAGS) day2
 
 clean:
 	gnatclean day2
