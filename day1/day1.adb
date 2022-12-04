@@ -92,7 +92,7 @@ begin
       if Buffer_Len > 0 then
          Calorie := Calorie + String_To_Integer(Buffer(Buffer'First..Buffer_Len));
       end if;
-      
+
       if (Buffer_Len = 0 or End_Of_File(Input)) and Calorie > 0 then
          Elf_Vec.Insert(Vector, Elf, Calorie);
          Calorie := 0;
@@ -106,6 +106,15 @@ begin
 
    Put("Highest calorie count: ");
    Put(Elf_Vec.Element(Vector, Elf_Idx'First));
+   New_Line;
+
+   Calorie := 0;
+   for Elf in Elf_Vec.First_Index(Vector)..Elf_Vec.First_Index(Vector)+2 loop
+      Calorie := Calorie + Elf_Vec.Element(Vector, Elf);
+   end loop;
+
+   Put("Top three calorie count: ");
+   Put(Calorie);
    New_Line;
 
 end Day1;
