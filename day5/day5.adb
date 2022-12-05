@@ -30,11 +30,8 @@ procedure Day5 is
       package Stack_Holder_Container is new Ada.Containers.Vectors(Positive, Stack_Container.Vector);
       use Stack_Holder_Container;
 
-      type Line_State is (Start, Stack, Instructions);
       Input: File_Type;
-      State: Line_State := Start;
-      Stacks_Length: Positive;
-      Crate_Pos: Positive;
+      Crate_Pos, Position: Positive;
       Stacks: Stack_Holder_Container.Vector;
       Move, From, To: Positive;
    begin
@@ -43,29 +40,29 @@ procedure Day5 is
          declare
             Line: constant String := Get_Line(Input);
          begin
-            if State = Start then
-               Stacks_Length := (Line'Length + 1) / 4;
-               Set_Length(Stacks, Ada.Containers.Count_Type(Stacks_Length));
-               State := Stack;
-            end if;
-
-            if State = Stack then
+            if Line'Length > 0 and then Line(1) /= 'm' then
                Crate_Pos := Line'First + 1;
 
-               for Position in 1..Stacks_Length loop
-                  if Line(Crate_Pos) = '1' then
-                     State := Instructions;
-                     exit;
+               while Crate_Pos < Line'Length loop
+                  Position := (Crate_Pos + 2) / 4;
+
+                  exit when Line(Crate_Pos) = '1';
+
+
+                  if Last_Index(Stacks) < Position then
+                     Set_Length(Stacks, Ada.Containers.Count_Type(Position));
                   end if;
 
                   if Line(Crate_Pos) in 'A'..'Z' then
                      Prepend(Reference(Stacks, Position), Line(Crate_Pos));
                   end if;
+
                   Crate_Pos := Crate_Pos + 4;
+
                end loop;
 
-            elsif State = Instructions and Line'Length > 0 then
 
+            elsif Line'Length > 0 and then Line(1) = 'm' then
                Extract_Instruction(Line, Move, From, To);
 
                if First then
@@ -101,7 +98,7 @@ procedure Day5 is
       end loop;
       Close(Input);
 
-      for I in 1..Stacks_Length loop
+      for I in First_Index(Stacks)..Last_Index(Stacks) loop
          Put(Last_Element(Constant_Reference(Stacks, I)));
       end loop;
       New_Line;
